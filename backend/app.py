@@ -2,7 +2,7 @@ import os
 from flask import Flask
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+   
 app = Flask(
     __name__,
     template_folder=os.path.join(BASE_DIR, "templates"),
@@ -30,6 +30,7 @@ def history_data():
     })
 @app.route("/")
 def home():
+    return render_template("login.html")
     return "Deployment working successfully"
 @app.route("/test")
 def test():
