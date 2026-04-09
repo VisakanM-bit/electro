@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>ESD Fault Prediction System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="esd-theme.css">
+
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: "Inter", "Segoe UI", sans-serif;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .container {
+        width: 95%;
+        max-width: 1450px;
+        min-height: 560px;
+        background: white;
+        border-radius: 24px;
+        overflow: hidden;
+        display: flex;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+
+    .left-panel {
+        width: 50%;
+        padding: 55px 70px;
+        background: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .logo-title {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 35px;
+    }
+
+    .logo-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        color: white;
+    }
+
+    .logo-title h2 {
+        margin: 0;
+        color: #1a202c;
+        font-size: 20px;
+        line-height: 1.4;
+        font-weight: 600;
+    }
+
+    .time-box {
+        font-size: 13px;
+        color: #718096;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .time-box i {
+        color: #667eea;
+    }
+
+    .heading {
+        font-size: 28px;
+        color: #1a202c;
+        margin-bottom: 30px;
+        font-weight: 700;
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 14px;
+        color: #2d3748;
+        font-weight: 600;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+        width: 100%;
+        padding: 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 8px;
+        background: #f7fafc;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+        outline: none;
+        border-color: #667eea;
+        background: white;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .password-field {
+        position: relative;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #718096;
+        font-size: 18px;
+        transition: all 0.2s ease;
+        margin-top: 10px;
+    }
+
+    .toggle-password:hover {
+        color: #667eea;
+    }
+
+    .options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 12px;
+        margin-bottom: 24px;
+        font-size: 14px;
+    }
+
+    .options label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+        cursor: pointer;
+        color: #2d3748;
+        font-weight: 500;
+    }
+
+    .options input[type="checkbox"] {
+        cursor: pointer;
+        accent-color: #667eea;
+    }
+
+    .options a {
+        color: #667eea;
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .options a:hover {
+        color: #764ba2;
+        text-decoration: underline;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .login-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .right-panel {
+        width: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 60px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: white;
+    }
+
+    .right-panel h1 {
+        color: white;
+        font-size: 42px;
+        margin-bottom: 25px;
+        font-weight: 700;
+    }
+
+    .right-panel p {
+        font-size: 18px;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.95);
+    }
+
+    .info-box {
+        margin-top: 30px;
+        padding: 22px;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.2);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+    }
+
+    .info-box h3 {
+        margin-top: 0;
+        margin-bottom: 15px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .info-box p {
+        margin: 0;
+        font-size: 14px;
+        line-height: 1.8;
+        color: rgba(255,255,255,0.9);
+    }
+
+    .footer {
+        margin-top: 40px;
+        font-size: 13px;
+        color: rgba(255,255,255,0.8);
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- LEFT -->
+    <div class="left-panel">
+
+        <div class="logo-title">
+            <div class="logo-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <h2>Electrostatic discharge</h2>
+        </div>
+
+        <div class="heading">
+            Please login to your account
+        </div>
+
+        <form method="POST" action="/login">
+
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Enter your username" required>
+            </div>
+
+            <div class="form-group">
+                <label>Email ID</label>
+                <input type="email" name="email" placeholder="Enter your email address" required>
+            </div>
+
+            <div class="form-group">
+                <label>Password</label>
+                <div class="password-field">
+                    <input type="password" id="passwordInput" name="password" placeholder="Enter your password" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword()">
+                        <i id="toggleIcon" class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="options">
+                <label>
+                    <input type="checkbox"> Remember me
+                </label>
+                <a href="#">Forgot Password?</a>
+            </div>
+
+            <button class="login-btn" type="submit">
+                Log in
+            </button>
+        </form>
+
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right-panel">
+
+        <h1><i class="fas fa-shield-alt"></i> Smart ESD Monitoring</h1>
+
+        <p>
+            A professional AI-powered system to monitor temperature,
+            humidity, and static charge in real time and predict
+            ESD faults before they damage sensitive components.
+        </p>
+
+        <div class="info-box">
+            <h3><i class="fas fa-star"></i> Key Features</h3>
+            <p>
+                ✓ Live sensor monitoring<br>
+                ✓ AI risk prediction<br>
+                ✓ Cloud integration<br>
+                ✓ Real-time alerts<br>
+                ✓ Historical analytics
+            </p>
+        </div>
+
+        <div class="footer">
+            © 2026 ESD Fault Prediction | Secure Access
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function updateTime() {
+    const now = new Date();
+    document.getElementById("currentTime").innerText =
+        now.toLocaleString("en-US", { 
+            weekday: 'short', 
+            year: 'numeric', 
+            month: 'short', 
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        });
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+function togglePassword() {
+    const input = document.getElementById("passwordInput");
+    const icon = document.getElementById("toggleIcon");
+    if (input.type === "password") {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+    } else {
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+    }
+}
+</script>
+
+</body>
+</html>

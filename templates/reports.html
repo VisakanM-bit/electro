@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-panel">
+    <div class="panel-header">
+        <div>
+            <h2><i class="fas fa-file-pdf"></i> Reports & Analytics</h2>
+            <p>Export historical summaries and PDF-ready reports for manufacturing review.</p>
+        </div>
+        <button class="btn btn-primary" onclick="generateReport('monthly_risk', true)">
+            <i class="fas fa-download"></i> Generate Report
+        </button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 32px;">
+        <div class="info-card">
+            <div class="info-card-icon" style="background: rgba(59, 130, 246, 0.15); color: #3b82f6;">
+                <i class="fas fa-chart-line"></i>
+            </div>
+            <div class="info-card-content">
+                <h4>Monthly Risk Report</h4>
+                <p>Overview of exposure levels, trends, and alerts generated during the month.</p>
+                <button class="btn btn-secondary" style="margin-top: 10px; width: 100%;" onclick="generateReport('monthly_risk', true)">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-card-icon" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;">
+                <i class="fas fa-heartbeat"></i>
+            </div>
+            <div class="info-card-content">
+                <h4>Device Health Summary</h4>
+                <p>Latest fault classification, performance metrics, and device health insights.</p>
+                <button class="btn btn-secondary" style="margin-top: 10px; width: 100%;" onclick="generateReport('device_health', true)">
+                    <i class="fas fa-download"></i> Download
+                </button>
+            </div>
+        </div>
+
+        <div class="info-card">
+            <div class="info-card-icon" style="background: rgba(34, 197, 94, 0.15); color: #22c55e;">
+                <i class="fas fa-database"></i>
+            </div>
+            <div class="info-card-content">
+                <h4>Data Export</h4>
+                <p>Export raw sensor data, logs, and analytics in CSV format.</p>
+                <button class="btn btn-secondary" style="margin-top: 10px; width: 100%;" onclick="exportData()">
+                    <i class="fas fa-download"></i> Export
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h3 style="margin-top: 0;"><i class="fas fa-history"></i> Generated Reports</h3>
+        <div class="alert-message" id="reportsToast"></div>
+        <div class="data-table" id="reportsTable">
+            <div class="table-row table-head">
+                <div><i class="fas fa-file-alt"></i> Report Name</div>
+                <div><i class="fas fa-calendar-alt"></i> Generated Date</div>
+                <div><i class="fas fa-comment"></i> Summary</div>
+                <div><i class="fas fa-cog"></i> Actions</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="empty-state" id="emptyReports" style="display: none; margin-top: 40px;">
+        <div class="empty-state-icon"><i class="fas fa-inbox"></i></div>
+        <h3>No Reports Generated</h3>
+        <p>Generate a report to see it listed here.</p>
+    </div>
+</div>
+
+<script>
+async function generateReport(type = 'monthly_risk', download = false) {
+    try {
+        const response = await fetch('/api/reports', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ type }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Unable to create report');
+        }
+
+        const data = await response.json();
+        loadReports();
+
+        if (download && data.report) {
+            generatePdfFromReport(data.report);
+            showReportMessage('AI-generated report is downloading now.', 'success');
+            return;
+        }
+
+        showReportMessage('Report generated successfully. It is now available in the list.', 'success');
+    } catch (error) {
+        console.error('Report generation failed:', error);
+        showReportMessage('Report generation failed. Please try again.', 'error');
+    }
+}
+
+async function loadReports() {
+    try {
+        const response = await fetch('/api/reports');
+        const data = await response.json();
+        renderReports(data.reports || []);
+    } catch (error) {
+        console.error('Error loading reports:', error);
+    }
+}
+
+function showReportMessage(message, type = 'success') {
+    const toast = document.getElementById('reportsToast');
+    if (!toast) {
+        return;
+    }
+
+    toast.textContent = message;
+    toast.className = `alert-message show ${type}`;
+    window.clearTimeout(toast.timeoutId);
+    toast.timeoutId = window.setTimeout(() => {
+        toast.className = 'alert-message';
+    }, 4500);
+}
+
+function generatePdfFromReport(report) {
+    const jsPDFConstructor = window.jspdf?.jsPDF || window.jsPDF;
+    if (!jsPDFConstructor) {
+        showReportMessage('Unable to generate PDF in this browser.', 'error');
+        return;
+    }
+
+    const pdf = new jsPDFConstructor({ unit: 'pt', format: 'a4' });
+    const margin = 40;
+    const maxWidth = 520;
+    const lineHeight = 16;
+    let y = 50;
+
+    const appendLines = (lines) => {
+        lines.forEach(line => {
+            if (y > 760) {
+                pdf.addPage();
+                y = margin;
+            }
+            pdf.text(line, margin, y);
+            y += lineHeight;
+        });
+        y += lineHeight / 2;
+    };
+
+    pdf.setFontSize(20);
+    pdf.text(report.report_name || 'Generated Report', margin, y);
+    y += 28;
+
+    pdf.setFontSize(11);
+    pdf.setTextColor('#555555');
+    appendLines([`Generated: ${new Date(report.generated_at).toLocaleString()}`, '']);
+
+    pdf.setFontSize(13);
+    pdf.setTextColor('#1f2937');
+    appendLines(['Executive Summary', '']);
+
+    pdf.setFontSize(11);
+    pdf.setTextColor('#334155');
+    appendLines(pdf.splitTextToSize(report.summary || report.report_contents || '', maxWidth));
+    appendLines(['']);
+
+    const riskCounts = report.data_summary?.risk_counts || {};
+    appendLines(['Risk Overview', '']);
+    appendLines([
+        `• Safe: ${riskCounts.safe ?? 'N/A'}`,
+        `• Medium: ${riskCounts.medium ?? 'N/A'}`,
+        `• High: ${riskCounts.high ?? 'N/A'}`,
+        `• History Count: ${report.data_summary?.history_count ?? 'N/A'}`,
+        '',
+    ]);
+
+    appendLines(['Latest Reading', '']);
+    const latest = report.data_summary?.latest_reading || {};
+    appendLines([
+        `Device ID: ${latest.device_id ?? 'N/A'}`,
+        `Timestamp: ${latest.timestamp ?? 'N/A'}`,
+        `Fault Status: ${latest.fault_status ?? 'N/A'}`,
+        `Temperature: ${latest.temperature ?? 'N/A'}`,
+        `Humidity: ${latest.humidity ?? 'N/A'}`,
+        `Static Charge: ${latest.static_charge ?? 'N/A'}`,
+        `Voltage: ${latest.voltage ?? 'N/A'}`,
+        '',
+    ]);
+
+    if (report.report_contents) {
+        appendLines(['Insights & Recommendations', '']);
+        appendLines(pdf.splitTextToSize(report.report_contents, maxWidth));
+    }
+
+    const filename = `${report.report_name?.replace(/\s+/g, '_').toLowerCase() || 'report'}.pdf`;
+    pdf.save(filename);
+}
+
+function renderReports(reports) {
+    const table = document.getElementById('reportsTable');
+    const empty = document.getElementById('emptyReports');
+
+    if (!reports || reports.length === 0) {
+        table.style.display = 'none';
+        empty.style.display = 'flex';
+        return;
+    }
+
+    table.style.display = 'grid';
+    empty.style.display = 'none';
+
+    const rows = table.querySelectorAll('.table-row.dynamic-row');
+    rows.forEach(r => r.remove());
+
+    reports.forEach(report => {
+        const row = document.createElement('div');
+        row.className = 'table-row dynamic-row';
+        row.innerHTML = `
+            <div><strong>${report.report_name}</strong></div>
+            <div>${new Date(report.generated_at).toLocaleString()}</div>
+            <div>${report.summary || 'Report summary'}</div>
+            <div>
+                <button class="btn btn-secondary" onclick="downloadReport('${report.id}')">
+                    <i class="fas fa-download"></i>
+                </button>
+            </div>
+        `;
+        table.appendChild(row);
+    });
+}
+
+function downloadReport(reportId) {
+    const report = latestReports.find(r => r.id === reportId);
+    if (report) {
+        generatePdfFromReport(report);
+        return;
+    }
+    window.location.href = `/api/reports/${reportId}/download`;
+}
+
+function exportData() {
+    showReportMessage('Preparing CSV export...', 'success');
+    window.location.href = '/api/export/csv';
+}
+
+let latestReports = [];
+
+async function loadReports() {
+    try {
+        const response = await fetch('/api/reports');
+        const data = await response.json();
+        latestReports = data.reports || [];
+        renderReports(latestReports);
+    } catch (error) {
+        console.error('Error loading reports:', error);
+    }
+}
+
+loadReports();
+</script>
+{% endblock %}

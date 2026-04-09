@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="dashboard-grid" id="dashboardOverview">
+    <div class="metric-card metric-card-with-icon">
+        <div class="metric-icon"><i class="fas fa-thermometer-half"></i></div>
+        <div class="metric-header">
+            <div>
+                <div class="metric-label"><i class="fas fa-thermometer-half"></i> Temperature</div>
+                <div class="metric-value" id="tempValue">-- °C</div>
+            </div>
+            <div class="metric-icon-small"><i class="fas fa-thermometer-half"></i></div>
+        </div>
+        <div class="metric-meta" id="tempMeta">Live reading from sensor</div>
+    </div>
+    <div class="metric-card metric-card-with-icon">
+        <div class="metric-icon"><i class="fas fa-water"></i></div>
+        <div class="metric-header">
+            <div>
+                <div class="metric-label"><i class="fas fa-droplets"></i> Humidity</div>
+                <div class="metric-value" id="humidityValue">-- %</div>
+            </div>
+            <div class="metric-icon-small" style="background: rgba(34, 197, 94, 0.15); color: #22c55e;"><i class="fas fa-droplets"></i></div>
+        </div>
+        <div class="metric-meta" id="humidityMeta">Environmental humidity</div>
+    </div>
+    <div class="metric-card metric-card-with-icon">
+        <div class="metric-icon"><i class="fas fa-lightning"></i></div>
+        <div class="metric-header">
+            <div>
+                <div class="metric-label"><i class="fas fa-bolt"></i> Static Charge</div>
+                <div class="metric-value" id="staticValue">-- V</div>
+            </div>
+            <div class="metric-icon-small" style="background: rgba(249, 115, 22, 0.15); color: #f97316;"><i class="fas fa-bolt"></i></div>
+        </div>
+        <div class="metric-meta" id="staticMeta">Surface charge level</div>
+    </div>
+    <div class="metric-card metric-card-with-icon">
+        <div class="metric-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="metric-header">
+            <div>
+                <div class="metric-label"><i class="fas fa-shield-alt"></i> ESD Risk Level</div>
+                <div class="metric-value risk" id="riskLevel">--</div>
+            </div>
+            <div class="metric-icon-small" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;"><i class="fas fa-exclamation-triangle"></i></div>
+        </div>
+        <div class="metric-meta" id="riskMeta">System threat assessment</div>
+    </div>
+    <div class="metric-card metric-card-with-icon">
+        <div class="metric-icon"><i class="fas fa-brain"></i></div>
+        <div class="metric-header">
+            <div>
+                <div class="metric-label"><i class="fas fa-microchip"></i> Prediction Status</div>
+                <div class="metric-value" id="predictionStatus">--</div>
+            </div>
+            <div class="metric-icon-small" style="background: rgba(168, 85, 247, 0.15); color: #a855f7;"><i class="fas fa-brain"></i></div>
+        </div>
+        <div class="metric-meta">AI fault prediction state</div>
+    </div>
+    <div class="metric-card metric-card-with-icon">
+        <div class="metric-icon"><i class="fas fa-clock"></i></div>
+        <div class="metric-header">
+            <div>
+                <div class="metric-label"><i class="fas fa-history"></i> Last Updated</div>
+                <div class="metric-value" id="lastUpdated">--</div>
+            </div>
+            <div class="metric-icon-small" style="background: rgba(8, 145, 178, 0.15); color: #0891b2;"><i class="fas fa-clock"></i></div>
+        </div>
+        <div class="metric-meta" id="timestampMeta">Timestamp from ThingSpeak</div>
+    </div>
+</div>
+
+<div class="metric-card status-card" id="dashboardStatusBars">
+    <div class="metric-header" style="margin-bottom: 18px;">
+        <div>
+            <div class="metric-label"><i class="fas fa-chart-bar"></i> Live Status Bars</div>
+            <div class="metric-value" style="font-size: 1rem; font-weight: 600;">Current value position in Safe / Medium / Higher zones</div>
+        </div>
+    </div>
+
+    <div class="status-row">
+        <div class="status-row-label">Temperature</div>
+        <div class="status-bar-wrapper">
+            <div class="status-bar" id="temperatureBar">
+                <div class="status-zone safe">Safe</div>
+                <div class="status-zone medium">Medium</div>
+                <div class="status-zone higher">Higher</div>
+                <div class="status-indicator" id="temperatureIndicator"></div>
+            </div>
+            <div class="status-value" id="temperatureStatusValue">-- °C</div>
+        </div>
+        <div class="status-zone-text" id="temperatureZoneText">Status: --</div>
+    </div>
+
+    <div class="status-row">
+        <div class="status-row-label">Humidity</div>
+        <div class="status-bar-wrapper">
+            <div class="status-bar" id="pressureBar">
+                <div class="status-zone safe">Safe</div>
+                <div class="status-zone medium">Medium</div>
+                <div class="status-zone higher">Higher</div>
+                <div class="status-indicator" id="pressureIndicator"></div>
+            </div>
+            <div class="status-value" id="pressureStatusValue">--</div>
+        </div>
+        <div class="status-zone-text" id="pressureZoneText">Status: --</div>
+    </div>
+
+    <div class="status-row">
+        <div class="status-row-label">Static Charge</div>
+        <div class="status-bar-wrapper">
+            <div class="status-bar" id="staticBar">
+                <div class="status-zone safe">Safe</div>
+                <div class="status-zone medium">Medium</div>
+                <div class="status-zone higher">Higher</div>
+                <div class="status-indicator" id="staticIndicator"></div>
+            </div>
+            <div class="status-value" id="staticStatusValue">-- V</div>
+        </div>
+        <div class="status-zone-text" id="staticZoneText">Status: --</div>
+    </div>
+</div>
+
+<div class="dashboard-panel">
+    <div class="panel-header">
+        <div>
+            <h2><i class="fas fa-eye"></i> Live System Summary</h2>
+            <p>Monitor the latest ESD conditions and identify high-risk events immediately.</p>
+        </div>
+        <button class="btn btn-primary" onclick="loadDashboardOverview()"><i class="fas fa-sync-alt"></i> Refresh Live Data</button>
+    </div>
+
+    <div class="alert-banner safe" id="dashboardAlert">
+        <div class="alert-icon"><i class="fas fa-check-circle"></i></div>
+        <div>
+            <strong id="dashboardAlertTitle">System stable</strong>
+            <p id="dashboardAlertText">No active ESD fault conditions detected.</p>
+        </div>
+    </div>
+
+    <div class="recent-panel">
+        <div class="recent-header">
+            <h3><i class="fas fa-table"></i> Recent Sensor Samples</h3>
+            <span class="recent-count" id="recentCount">0 entries</span>
+        </div>
+        <div class="data-table" id="dashboardRecentTable">
+            <div class="table-row table-head">
+                <div><i class="fas fa-calendar-alt"></i> Time</div>
+                <div><i class="fas fa-thermometer-half"></i> Temp</div>
+                <div><i class="fas fa-droplets"></i> Humidity</div>
+                <div><i class="fas fa-bolt"></i> Static Charge</div>
+                <div><i class="fas fa-percentage"></i> Risk</div>
+                <div><i class="fas fa-flag"></i> Status</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

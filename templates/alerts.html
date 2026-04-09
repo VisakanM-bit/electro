@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-panel">
+    <div class="panel-header">
+        <div>
+            <h2><i class="fas fa-bell"></i> System Alerts</h2>
+            <p>Active alerts generated from risk status and threshold breaches.</p>
+        </div>
+        <button class="btn btn-primary" onclick="refreshAlerts()">
+            <i class="fas fa-sync-alt"></i> Refresh Alerts
+        </button>
+    </div>
+
+    <div style="display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap;">
+        <div class="info-card" style="flex: 1; min-width: 150px;">
+            <div class="info-card-icon" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            <div class="info-card-content">
+                <h4>Critical</h4>
+                <p id="criticalCount">0</p>
+            </div>
+        </div>
+        <div class="info-card" style="flex: 1; min-width: 150px;">
+            <div class="info-card-icon" style="background: rgba(249, 115, 22, 0.15); color: #f97316;">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <div class="info-card-content">
+                <h4>Warning</h4>
+                <p id="warningCount">0</p>
+            </div>
+        </div>
+        <div class="info-card" style="flex: 1; min-width: 150px;">
+            <div class="info-card-icon" style="background: rgba(34, 197, 94, 0.15); color: #22c55e;">
+                <i class="fas fa-info-circle"></i>
+            </div>
+            <div class="info-card-content">
+                <h4>Info</h4>
+                <p id="infoCount">0</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="data-table" id="alertsTable">
+        <div class="table-row table-head">
+            <div><i class="fas fa-tag"></i> Alert</div>
+            <div><i class="fas fa-layer-group"></i> Level</div>
+            <div><i class="fas fa-comment"></i> Message</div>
+            <div><i class="fas fa-calendar-alt"></i> Timestamp</div>
+        </div>
+    </div>
+
+    <div class="empty-state" id="emptyAlerts" style="display: none;">
+        <div class="empty-state-icon"><i class="fas fa-check-circle"></i></div>
+        <h3>No Active Alerts</h3>
+        <p>All systems are operating normally.</p>
+    </div>
+</div>
+
+<script>
+async function refreshAlerts() {
+    try {
+        const response = await fetch('/api/alerts');
+        const data = await response.json();
+        renderAlerts(data.alerts || []);
+    } catch (error) {
+        console.error('Error loading alerts:', error);
+    }
+}
+
+function renderAlerts(alerts) {
+    const table = document.getElementById('alertsTable');
+    const empty = document.getElementById('emptyAlerts');
+    
+    if (!alerts || alerts.length === 0) {
+        table.style.display = 'none';
+        empty.style.display = 'flex';
+        document.getElementById('criticalCount').textContent = '0';
+        document.getElementById('warningCount').textContent = '0';
+        document.getElementById('infoCount').textContent = '0';
+        return;
+    }
+    
+    table.style.display = 'grid';
+    empty.style.display = 'none';
+    
+    const rows = table.querySelectorAll('.table-row.dynamic-row');
+    rows.forEach(r => r.remove());
+    
+    let criticalCount = 0, warningCount = 0, infoCount = 0;
+    
+    alerts.forEach(alert => {
+        const level = alert.level?.toLowerCase() || 'info';
+        const row = document.createElement('div');
+        row.className = 'table-row dynamic-row';
+        
+        let levelIcon = '⚠️';
+        if (level === 'critical') {
+            levelIcon = '🔴';
+            criticalCount++;
+        } else if (level === 'warning') {
+            levelIcon = '🟠';
+            warningCount++;
+        } else {
+            levelIcon = '🔵';
+            infoCount++;
+        }
+        
+        row.innerHTML = `
+            <div><strong>${alert.name || 'Alert'}</strong></div>
+            <div>${levelIcon} ${level}</div>
+            <div>${alert.message || 'N/A'}</div>
+            <div>${new Date(alert.timestamp).toLocaleString()}</div>
+        `;
+        table.appendChild(row);
+    });
+    
+    document.getElementById('criticalCount').textContent = criticalCount;
+    document.getElementById('warningCount').textContent = warningCount;
+    document.getElementById('infoCount').textContent = infoCount;
+}
+
+refreshAlerts();
+setInterval(refreshAlerts, 10000);
+</script>
+{% endblock %}

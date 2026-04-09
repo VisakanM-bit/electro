@@ -1,0 +1,44 @@
+{
+    "temperature": {
+        "safe": [
+            20,
+            25
+        ],
+        "warning": [
+            26,
+            30
+        ],
+        "danger": [
+            30,
+            999
+        ]
+    },
+    "humidity": {
+        "safe": [
+            40,
+            60
+        ],
+        "warning": [
+            30,
+            40
+        ],
+        "danger": [
+            0,
+            29
+        ]
+    },
+    "static_charge": {
+        "safe": [
+            0,
+            50
+        ],
+        "warning": [
+            50,
+            100
+        ],
+        "danger": [
+            101,
+            999
+        ]
+    }
+}

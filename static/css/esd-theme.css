@@ -1,0 +1,224 @@
+/* =========================================
+   FINAL MULTI-COLOR ESD DASHBOARD THEME
+   ========================================= */
+
+/* MAIN BACKGROUND */
+.main-content {
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    background:
+        radial-gradient(circle at 15% 25%, rgba(40, 76, 134, 0.22), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(34,197,94,0.18), transparent 28%),
+        radial-gradient(circle at 50% 80%, rgba(239,68,68,0.16), transparent 35%),
+        linear-gradient(135deg, #020617 0%, #0f172a 45%, #1e293b 100%) !important;
+}
+
+/* Moving electric sparks */
+.main-content::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(120deg, transparent 48%, rgba(59,130,246,0.18) 50%, transparent 52%),
+        linear-gradient(60deg, transparent 48%, rgba(40, 34, 197, 0.14) 50%, transparent 52%),
+        linear-gradient(30deg, transparent 48%, rgba(239,68,68,0.10) 50%, transparent 52%);
+    background-size: 220px 220px, 260px 260px, 300px 300px;
+    animation: sparkMove 8s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Glow overlay */
+.main-content::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 25% 40%, rgba(59,130,246,0.10), transparent 35%),
+        radial-gradient(circle at 75% 65%, rgba(34,197,94,0.08), transparent 30%),
+        radial-gradient(circle at 60% 30%, rgba(239,68,68,0.06), transparent 28%);
+    animation: glowPulse 6s ease-in-out infinite alternate;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* HEADER */
+.page-title {
+    color: #ffffff !important;
+    font-size: 38px;
+    font-weight: 800;
+}
+
+.page-subtitle {
+    color: #93c5fd !important;
+    font-size: 18px;
+}
+
+/* 3 x 3 GRID */
+.dashboard-grid {
+    position: relative;
+    z-index: 2;
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 24px !important;
+    width: 100%;
+    margin-top: 20px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* CARDS */
+.metric-card,
+.status-card {
+    position: relative;
+    z-index: 2;
+    min-height: 180px;
+    padding: 22px;
+    border-radius: 22px;
+    background: rgba(17, 1, 1, 0.868);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(96,165,250,0.18);
+    box-shadow: 0 8px 24px rgba(15,23,42,0.25);
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover,
+.status-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(59,130,246,0.25);
+}
+
+/* LIVE STATUS PANEL */
+./* =========================================
+   LIVE STATUS BARS ENHANCED BACKGROUND
+   ========================================= */
+
+.live-status-card {
+    position: relative;
+    margin-top: 24px;
+    padding: 28px 32px;
+    border-radius: 24px;
+
+    /* Premium dark animated gradient */
+    background: linear-gradient(
+        135deg,
+        rgba(15, 23, 42, 0.94),
+        rgba(30, 41, 59, 0.90),
+        rgba(17, 24, 39, 0.94)
+    ) !important;
+
+    border: 1px solid rgba(96, 165, 250, 0.18);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(12px);
+    overflow: hidden;
+}
+
+/* animated electric glow */
+.live-status-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 20% 30%, rgba(59,130,246,0.18), transparent 35%),
+        radial-gradient(circle at 80% 70%, rgba(34,197,94,0.14), transparent 35%),
+        radial-gradient(circle at 60% 20%, rgba(239,68,68,0.10), transparent 30%);
+    animation: statusGlow 6s ease-in-out infinite alternate;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* moving spark line */
+.live-status-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(120deg, transparent 48%, rgba(59,130,246,0.10) 50%, transparent 52%);
+    background-size: 220px 220px;
+    animation: sparkMove 8s linear infinite;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* keep content above background */
+.live-status-card * {
+    position: relative;
+    z-index: 2;
+}
+
+/* animations */
+@keyframes statusGlow {
+    from {
+        opacity: 0.45;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0.75;
+        transform: scale(1.02);
+    }
+}
+
+@keyframes sparkMove {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: 220px 220px;
+    }
+}
+/* TABLE */
+.table-row {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    border-radius: 14px;
+    transition: all 0.3s ease;
+}
+
+.table-row:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 18px rgba(59,130,246,0.18);
+}
+
+/* TEXT */
+h1,h2,h3,h4 {
+    color: #1a0202 !important;
+}
+
+p, span, label {
+    color: #010810 !important;
+}
+
+/* ANIMATIONS */
+@keyframes sparkMove {
+    from {
+        background-position: 0 0, 0 0, 0 0;
+    }
+    to {
+        background-position: 220px 220px, -220px 220px, 180px 180px;
+    }
+}
+
+@keyframes glowPulse {
+    from {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0.7;
+        transform: scale(1.03);
+    }
+}

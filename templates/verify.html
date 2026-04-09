@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-panel">
+    <div class="panel-header">
+        <div>
+            <h2>Email verification</h2>
+            <p>{{ message }}</p>
+        </div>
+    </div>
+
+    <div class="alert-banner {% if verified %}safe{% else %}danger{% endif %}">
+        <div class="alert-icon">{% if verified %}✔{% else %}⚠{% endif %}</div>
+        <div>
+            <strong>{% if verified %}Verification successful{% else %}Verification failed{% endif %}</strong>
+            <p>{% if verified %}You may now proceed to the dashboard.{% else %}Please request a new verification link by logging in again.{% endif %}</p>
+        </div>
+    </div>
+
+    <div class="final-actions">
+        {% if verified %}
+            <a class="btn btn-primary" href="/dashboard">Go to Dashboard</a>
+        {% else %}
+            <a class="btn btn-primary" href="/">Return to Login</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

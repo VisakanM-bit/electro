@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="final-panel">
+    <div class="final-card">
+        <h2>Welcome back, {{ username }}!</h2>
+        <p class="final-text">
+            Your login was successful. The ESD Fault Prediction System is ready to present live telemetry,
+            historical insights, and prediction reports.
+        </p>
+        <div class="final-actions">
+            <a class="btn btn-primary" href="{{ url_for('dashboard') }}">Open Dashboard</a>
+            <a class="btn btn-secondary" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

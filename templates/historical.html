@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-panel">
+    <div class="panel-header">
+        <h2>Historical Analysis</h2>
+        <p>Review the sensor history for trends, spikes, and fault patterns.</p>
+    </div>
+
+    <div class="analysis-toolbar">
+        <div class="analysis-filter-group">
+            <span class="filter-label">Time range:</span>
+            <button class="btn btn-secondary history-filter active" onclick="setHistoryFilter(20, this)">20m</button>
+            <button class="btn btn-secondary history-filter" onclick="setHistoryFilter(60, this)">1h</button>
+            <button class="btn btn-secondary history-filter" onclick="setHistoryFilter(120, this)">2h</button>
+            <button class="btn btn-secondary history-filter" onclick="setHistoryFilter(180, this)">3h</button>
+            <button class="btn btn-secondary history-filter" onclick="setHistoryFilter(300, this)">5h</button>
+            <button class="btn btn-secondary history-filter" onclick="setHistoryFilter(1440, this)">24h</button>
+            <button class="btn btn-secondary history-filter" onclick="setHistoryFilter(10080, this)">7d</button>
+            <button class="btn btn-secondary history-filter" onclick="setHistoryFilter(43200, this)">30d</button>
+        </div>
+        <div class="analysis-summary-pill">
+            <div><strong id="historyRecordCount">0</strong> records</div>
+            <div>Last updated <strong id="historyLastUpdated">--</strong></div>
+        </div>
+    </div>
+
+    <div class="history-analysis-panel">
+        <div class="analysis-grid">
+            <div class="analysis-card chart-card">
+                <div class="chart-card-header">
+                    <div>
+                        <h3>Environmental Trend</h3>
+                        <p>Temperature, humidity, and voltage trend across the selected range.</p>
+                    </div>
+                    <span class="status-badge">Live Trend</span>
+                </div>
+                <div class="chart-canvas">
+                    <canvas id="outerHistoryChart"></canvas>
+                </div>
+                <div class="chart-values-row">
+                    <div>
+                        <span>Avg Temp</span>
+                        <strong id="outerTempValue">-- °C</strong>
+                    </div>
+                    <div>
+                        <span>Avg Humidity</span>
+                        <strong id="outerHumidityValue">-- %</strong>
+                    </div>
+                    <div>
+                        <span>Avg Voltage</span>
+                        <strong id="outerVoltageValue">-- V</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-card side-card">
+                <div class="chart-card-header">
+                    <div>
+                        <h3>Static Charge Summary</h3>
+                        <p>Average, peak, and fluctuation values for accumulated static charge.</p>
+                    </div>
+                </div>
+                <div class="chart-canvas small">
+                    <canvas id="middleHistoryChart"></canvas>
+                </div>
+                <div class="metric-breakdown">
+                    <div>
+                        <span>Average</span>
+                        <strong id="middleStaticAvg">-- V</strong>
+                    </div>
+                    <div>
+                        <span>Peak</span>
+                        <strong id="middleStaticPeak">-- V</strong>
+                    </div>
+                    <div>
+                        <span>Fluctuation</span>
+                        <strong id="middleStaticFluctuation">--</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="analysis-card side-card">
+                <div class="chart-card-header">
+                    <div>
+                        <h3>Risk Zone Breakdown</h3>
+                        <p>Safe / Medium / Higher risk distribution and discharge peaks.</p>
+                    </div>
+                </div>
+                <div class="chart-canvas small">
+                    <canvas id="innerHistoryChart"></canvas>
+                </div>
+                <div class="metric-breakdown">
+                    <div>
+                        <span>Latest Risk</span>
+                        <strong id="innerRiskLatest">--</strong>
+                    </div>
+                    <div>
+                        <span>Peaks</span>
+                        <strong id="innerRiskPeaks">--</strong>
+                    </div>
+                    <div>
+                        <span>Zone</span>
+                        <strong id="innerRiskZone">--</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="analysis-metrics-grid">
+        <div class="metric-card">
+            <span class="metric-label">Peak Static Charge</span>
+            <div class="metric-value" id="summaryPeakStatic">-- V</div>
+            <p class="metric-meta">Highest static charge in the selected period.</p>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Average Risk Score</span>
+            <div class="metric-value" id="summaryAvgRisk">--</div>
+            <p class="metric-meta">Average risk score across the selected timeframe.</p>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Threshold Crossings</span>
+            <div class="metric-value" id="summaryCrossings">--</div>
+            <p class="metric-meta">Number of medium/high threshold events.</p>
+        </div>
+    </div>
+
+    <div class="table-actions">
+        <button class="btn btn-secondary" onclick="loadHistoryTable(); loadHistoricalAnalysis();">Refresh History</button>
+    </div>
+
+    <div class="data-table" id="liveDataTable">
+        <div class="table-row table-head">
+            <div>ID</div><div>Temperature</div><div>Humidity</div><div>Static Charge</div><div>Voltage</div><div>Risk Score</div><div>Fault Status</div><div>Timestamp</div><div>Device ID</div>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/history.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,225 @@
+[
+    {
+        "id": "a913140c2b7d4412a361d6fe43667e42",
+        "generated_at": "2026-04-08T10:20:02.217813",
+        "report_type": "device_health",
+        "report_name": "Device Health Summary",
+        "summary": "Latest device state for ESP32-01. Fault status: High Risk. Recent sensor activity includes 20 records.",
+        "data_summary": {
+            "device_id": "ESP32-01",
+            "fault_status": "High Risk",
+            "latest_temperature": 35.9,
+            "latest_humidity": 23.0,
+            "latest_static_charge": 85.39,
+            "latest_voltage": 0.0,
+            "history_records": 20,
+            "risk_counts": {
+                "safe": 0,
+                "medium": 0,
+                "high": 20
+            }
+        },
+        "report_contents": "Device Health Summary for ESP32-01\nGenerated at 2026-04-08T10:20:02.217813\n\nSummary:\n  Latest device state for ESP32-01. Fault status: High Risk. Recent sensor activity includes 20 records.\n\nLatest Reading:\n  Timestamp: 2026-04-08T10:19:46Z\n  Device ID: ESP32-01\n  Fault Status: High Risk\n  Temperature: 35.9\n  Humidity: 23.0\n  Static Charge: 85.39\n  Voltage: 0.0\n\nRisk Counts:\n  Safe: 0\n  Medium: 0\n  High: 20\n\nRecommendations:\n  Review devices showing medium/high risk and normalize environmental controls to reduce ESD exposure."
+    },
+    {
+        "id": "532b49f9489441788c4bb3c110085041",
+        "generated_at": "2026-04-08T10:19:56.833318",
+        "report_type": "monthly_risk",
+        "report_name": "Monthly Risk Report",
+        "summary": "Recent risk breakdown includes 0 safe, 0 medium, and 20 high-risk entries. Latest status: High Risk.",
+        "data_summary": {
+            "latest_reading": {
+                "id": 605,
+                "temperature": 35.9,
+                "humidity": 23.0,
+                "static_charge": 85.39,
+                "voltage": 0.0,
+                "risk_score": 0.7388,
+                "device_id": "ESP32-01",
+                "timestamp": "2026-04-08T10:19:46Z",
+                "fault_status": "High Risk"
+            },
+            "history_count": 20,
+            "risk_counts": {
+                "safe": 0,
+                "medium": 0,
+                "high": 20
+            }
+        },
+        "report_contents": "Monthly Risk Report\nGenerated at 2026-04-08T10:19:56.833318\n\nSummary:\n  Recent risk breakdown includes 0 safe, 0 medium, and 20 high-risk entries. Latest status: High Risk.\n\nRisk Counts:\n  Safe: 0\n  Medium: 0\n  High: 20\n\nLatest Reading:\n  Timestamp: 2026-04-08T10:19:46Z\n  Device ID: ESP32-01\n  Fault Status: High Risk\n  Temperature: 35.9\n  Humidity: 23.0\n  Static Charge: 85.39\n  Voltage: 0.0\n\nInsights:\n  The system observed the highest risk when latest values exceeded normal thresholds for static charge and temperature.\n  Review the environment and sensor placement to reduce ESD exposure."
+    },
+    {
+        "id": "166183b8d4ef4df9933db222761b0fec",
+        "generated_at": "2026-04-08T10:09:02.367843",
+        "report_type": "monthly_risk",
+        "report_name": "Monthly Risk Report",
+        "summary": "Recent risk breakdown includes 0 safe, 20 medium, and 0 high-risk entries. Latest status: Medium Risk.",
+        "data_summary": {
+            "latest_reading": {
+                "id": 577,
+                "temperature": 34.8,
+                "humidity": 31.0,
+                "static_charge": 75.76,
+                "voltage": 0.0,
+                "risk_score": 0.5517,
+                "device_id": "ESP32-01",
+                "timestamp": "2026-04-08T09:24:57Z",
+                "fault_status": "Medium Risk"
+            },
+            "history_count": 20,
+            "risk_counts": {
+                "safe": 0,
+                "medium": 20,
+                "high": 0
+            }
+        },
+        "report_contents": "Monthly Risk Report\nGenerated at 2026-04-08T10:09:02.367843\n\nSummary:\n  Recent risk breakdown includes 0 safe, 20 medium, and 0 high-risk entries. Latest status: Medium Risk.\n\nRisk Counts:\n  Safe: 0\n  Medium: 20\n  High: 0\n\nLatest Reading:\n  Timestamp: 2026-04-08T09:24:57Z\n  Device ID: ESP32-01\n  Fault Status: Medium Risk\n  Temperature: 34.8\n  Humidity: 31.0\n  Static Charge: 75.76\n  Voltage: 0.0\n\nInsights:\n  The system observed the highest risk when latest values exceeded normal thresholds for static charge and temperature.\n  Review the environment and sensor placement to reduce ESD exposure."
+    },
+    {
+        "id": "f3dbd28e61504c30a12771d77a7186ff",
+        "generated_at": "2026-04-08T08:13:20.649098",
+        "report_type": "monthly_risk",
+        "report_name": "Monthly Risk Report",
+        "summary": "Recent risk breakdown includes 0 safe, 20 medium, and 0 high-risk entries. Latest status: Medium Risk.",
+        "data_summary": {
+            "latest_reading": {
+                "id": 484,
+                "temperature": 34.0,
+                "humidity": 33.0,
+                "static_charge": 73.03,
+                "voltage": 0.0,
+                "risk_score": 0.5637,
+                "device_id": "ESP32-01",
+                "timestamp": "2026-04-08T07:43:44Z",
+                "fault_status": "Medium Risk"
+            },
+            "history_count": 20,
+            "risk_counts": {
+                "safe": 0,
+                "medium": 20,
+                "high": 0
+            }
+        },
+        "report_contents": "Monthly Risk Report\nGenerated at 2026-04-08T08:13:20.649098\n\nSummary: Recent risk breakdown includes 0 safe, 20 medium, and 0 high-risk entries. Latest status: Medium Risk.\n\nRisk counts: Safe=0, Medium=20, High=0.\nLatest reading timestamp: 2026-04-08T07:43:44Z\nLatest status: Medium Risk\n\nTop observations: The system observed the highest risk when latest values exceeded normal thresholds for static charge and temperature. Review the environment and sensor placement to reduce ESD exposure."
+    },
+    {
+        "id": "1d2c48feb5044ef8af8cd8fe79904a77",
+        "generated_at": "2026-04-08T08:01:14.756144",
+        "report_name": "Monthly Risk Report",
+        "summary": "Recent risk breakdown includes 0 safe, 20 medium, and 0 high-risk entries. Latest status: Medium Risk.",
+        "data_summary": {
+            "latest_reading": {
+                "id": 484,
+                "temperature": 34.0,
+                "humidity": 33.0,
+                "static_charge": 73.03,
+                "voltage": 0.0,
+                "risk_score": 0.5637,
+                "device_id": "ESP32-01",
+                "timestamp": "2026-04-08T07:43:44Z",
+                "fault_status": "Medium Risk"
+            },
+            "history_count": 20,
+            "risk_counts": {
+                "safe": 0,
+                "medium": 20,
+                "high": 0
+            }
+        }
+    },
+    {
+        "id": "dc63fb463012416388fd35a492d0589a",
+        "generated_at": "2026-04-08T07:59:55.212787",
+        "report_name": "Monthly Risk Report",
+        "summary": "Recent risk breakdown includes 0 safe, 20 medium, and 0 high-risk entries. Latest status: Medium Risk.",
+        "data_summary": {
+            "latest_reading": {
+                "id": 484,
+                "temperature": 34.0,
+                "humidity": 33.0,
+                "static_charge": 73.03,
+                "voltage": 0.0,
+                "risk_score": 0.5637,
+                "device_id": "ESP32-01",
+                "timestamp": "2026-04-08T07:43:44Z",
+                "fault_status": "Medium Risk"
+            },
+            "history_count": 20,
+            "risk_counts": {
+                "safe": 0,
+                "medium": 20,
+                "high": 0
+            }
+        }
+    },
+    {
+        "id": "7810036ca16a4a4ba0426a0a6fac78a7",
+        "generated_at": "2026-04-08T07:59:11.841057",
+        "report_name": "Device Health Summary",
+        "summary": "Latest device state for ESP32-01. Fault status: Medium Risk. Recent sensor activity includes 20 records.",
+        "data_summary": {
+            "device_id": "ESP32-01",
+            "fault_status": "Medium Risk",
+            "latest_temperature": 34.0,
+            "latest_humidity": 33.0,
+            "latest_static_charge": 73.03,
+            "latest_voltage": 0.0,
+            "history_records": 20,
+            "risk_counts": {
+                "safe": 0,
+                "medium": 20,
+                "high": 0
+            }
+        }
+    },
+    {
+        "id": "cffbff7ea6be4f25b04e03b49d48f9a6",
+        "generated_at": "2026-04-08T07:59:03.016214",
+        "report_name": "Monthly Risk Report",
+        "summary": "Recent risk breakdown includes 0 safe, 20 medium, and 0 high-risk entries. Latest status: Medium Risk.",
+        "data_summary": {
+            "latest_reading": {
+                "id": 484,
+                "temperature": 34.0,
+                "humidity": 33.0,
+                "static_charge": 73.03,
+                "voltage": 0.0,
+                "risk_score": 0.5637,
+                "device_id": "ESP32-01",
+                "timestamp": "2026-04-08T07:43:44Z",
+                "fault_status": "Medium Risk"
+            },
+            "history_count": 20,
+            "risk_counts": {
+                "safe": 0,
+                "medium": 20,
+                "high": 0
+            }
+        }
+    },
+    {
+        "id": "47ddcc0ba96540dca5c11731d397bc5d",
+        "generated_at": "2026-04-08T07:59:00.896218",
+        "report_name": "Monthly Risk Report",
+        "summary": "Recent risk breakdown includes 0 safe, 20 medium, and 0 high-risk entries. Latest status: Medium Risk.",
+        "data_summary": {
+            "latest_reading": {
+                "id": 484,
+                "temperature": 34.0,
+                "humidity": 33.0,
+                "static_charge": 73.03,
+                "voltage": 0.0,
+                "risk_score": 0.5637,
+                "device_id": "ESP32-01",
+                "timestamp": "2026-04-08T07:43:44Z",
+                "fault_status": "Medium Risk"
+            },
+            "history_count": 20,
+            "risk_counts": {
+                "safe": 0,
+                "medium": 20,
+                "high": 0
+            }
+        }
+    }
+]

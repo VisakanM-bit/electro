@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESD Fault Prediction System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/esd-theme.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+    
+</head>
+<body class="dark-mode">
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div>
+                <div class="sidebar-brand"><i class="fas fa-microchip"></i> ESD Predictor</div>
+                <div class="sidebar-text">Industry-grade fault prediction</div>
+                <nav class="nav-menu">
+                    <a href="/dashboard" class="nav-link {% if page == 'dashboard' %}active{% endif %}"><i class="fas fa-chart-line"></i> Dashboard</a>
+                    <a href="/live-data" class="nav-link {% if page == 'live_data' %}active{% endif %}"><i class="fas fa-broadcast-tower"></i> Live Sensor Data</a>
+                    <a href="/history" class="nav-link {% if page == 'history' %}active{% endif %}"><i class="fas fa-history"></i> Historical Analysis</a>
+                    <a href="/prediction-results" class="nav-link {% if page == 'prediction_results' %}active{% endif %}"><i class="fas fa-brain"></i> Prediction Results</a>
+                    <a href="/alerts" class="nav-link {% if page == 'alerts' %}active{% endif %}"><i class="fas fa-bell"></i> Alerts</a>
+                    <a href="/reports" class="nav-link {% if page == 'reports' %}active{% endif %}"><i class="fas fa-file-pdf"></i> Reports</a>
+                    <a href="/user-activity" class="nav-link {% if page == 'user_activity' %}active{% endif %}"><i class="fas fa-users"></i> User Activity</a>
+                    <a href="/settings" class="nav-link {% if page == 'settings' %}active{% endif %}"><i class="fas fa-cog"></i> Admin Settings</a>
+                    <a href="/logout" class="nav-link nav-logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </nav>
+            </div>
+            <div class="sidebar-footer">
+                <span><i class="fas fa-user-circle"></i> Logged in as</span>
+                <strong>{{ username or 'Operator' }}</strong>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header class="top-bar">
+                <div>
+                    <h1 class="page-title"><i class="fas fa-home"></i> {{ page|capitalize|replace('_', ' ') }}</h1>
+                    <p class="page-subtitle">Industrial monitoring for temperature, humidity, static charge, and ESD risk.</p>
+                </div>
+                <div class="user-panel"><i class="fas fa-user"></i> {{ username or 'Operator' }}</div>
+            </header>
+            <section class="page-body">{% block content %}{% endblock %}</section>
+        </main>
+    </div>
+</body>
+</html>

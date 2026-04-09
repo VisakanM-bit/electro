@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-panel">
+    <div class="panel-header">
+        <h2>Prediction Results</h2>
+        <p>Submit live sensor inputs and review model output from TFT inference.</p>
+    </div>
+    <form id="predictionForm" class="prediction-form" onsubmit="handlePrediction(event)">
+        <div class="form-grid">
+            <label>Temperature (°C)<input type="number" step="0.1" id="predictTemperature" required /></label>
+            <label>Humidity (%)<input type="number" step="0.1" id="predictHumidity" required /></label>
+            <label>Static Charge<input type="number" step="0.1" id="predictStatic" required /></label>
+            <label>Voltage (V)<input type="number" step="0.01" id="predictVoltage" required /></label>
+        </div>
+        <button type="submit" class="btn btn-primary">Predict Fault</button>
+    </form>
+    <div class="prediction-result" id="predictionResult"></div>
+</div>
+{% endblock %}

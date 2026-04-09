@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-panel">
+    <div class="panel-header">
+        <h2>Live Sensor Data</h2>
+        <p>Monitor sensor telemetry with search, filters, sorting, and export tools.</p>
+    </div>
+    <div class="table-actions">
+        <input id="dataSearch" type="text" placeholder="Search by sensor, status or device" oninput="filterTable()" />
+        <button class="btn btn-secondary" onclick="loadLiveDataTable()">Refresh Live Data</button>
+        <button class="btn btn-secondary" onclick="exportCSV()">Export CSV</button>
+        <button class="btn btn-secondary" onclick="exportPDF()">Export PDF</button>
+    </div>
+    <div class="data-table" id="liveDataTable">
+        <div class="table-row table-head">
+            <div>ID</div><div>Temperature</div><div>Humidity</div><div>Static Charge</div><div>Voltage</div><div>Risk Score</div><div>Fault Status</div><div>Timestamp</div><div>Device ID</div>
+        </div>
+    </div>
+</div>
+{% endblock %}

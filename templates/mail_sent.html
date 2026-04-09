@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="page-panel">
+    <div class="panel-header">
+        <div>
+            <h2>Email verification required</h2>
+            <p>A verification message has been sent to <strong>{{ email }}</strong>. Please open your inbox and click the verification link to continue.</p>
+        </div>
+    </div>
+
+    <div class="alert-banner safe">
+        <div class="alert-icon">✉</div>
+        <div>
+            <strong>Verification sent</strong>
+            <p>Once you click the link in your email, your access will be activated for dashboard monitoring.</p>
+        </div>
+    </div>
+
+    <div class="final-actions">
+        <a class="btn btn-primary" href="/">Return to login</a>
+        <a class="btn btn-secondary" href="/verify">I have clicked the link</a>
+    </div>
+</div>
+{% endblock %}
