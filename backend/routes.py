@@ -44,33 +44,6 @@ def load_activity():
         return []
 
 
-def send_alert_email(subject, body, to_email):
-    """Send an alert email."""
-    smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-    smtp_port = int(os.getenv("SMTP_PORT", 587))
-    smtp_user = os.getenv("SMTP_USER")
-    smtp_pass = os.getenv("SMTP_PASS")
-
-    if not smtp_user or not smtp_pass:
-        logger.warning("SMTP credentials not configured, skipping email alert")
-        return
-
-    msg = MIMEText(body)
-    msg['Subject'] = subject
-    msg['From'] = smtp_user
-    msg['To'] = to_email
-
-    try:
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.starttls()
-        server.login(smtp_user, smtp_pass)
-        server.sendmail(smtp_user, to_email, msg.as_string())
-        server.quit()
-        logger.info("Alert email sent to %s", to_email)
-    except Exception as e:
-        logger.error("Failed to send alert email: %s", e)
-
-
 def save_activity(activity):
     """Save user activity log to JSON file."""
     with open(ACTIVITY_FILE, "w") as file:
@@ -246,22 +219,14 @@ def build_report_summary(report_type, latest, history):
         report["report_contents"] = (
             f"Device Health Summary for {device_id}\n"
             f"Generated at {now}\n\n"
-            f"Summary:\n"
-            f"  {report['summary']}\n\n"
-            f"Latest Reading:\n"
-            f"  Timestamp: {latest.get('timestamp', 'N/A')}\n"
-            f"  Device ID: {device_id}\n"
-            f"  Fault Status: {last_status}\n"
-            f"  Temperature: {latest.get('temperature', 'N/A')}\n"
-            f"  Humidity: {latest.get('humidity', 'N/A')}\n"
-            f"  Static Charge: {latest.get('static_charge', 'N/A')}\n"
-            f"  Voltage: {latest.get('voltage', 'N/A')}\n\n"
-            f"Risk Counts:\n"
-            f"  Safe: {safe_count}\n"
-            f"  Medium: {medium_count}\n"
-            f"  High: {high_count}\n\n"
-            f"Recommendations:\n"
-            f"  Review devices showing medium/high risk and normalize environmental controls to reduce ESD exposure."
+            f"Latest Fault Status: {last_status}\n"
+            f"Latest sensor readings: Temperature={latest.get('temperature', 'N/A')}, "
+            f"Humidity={latest.get('humidity', 'N/A')}, "
+            f"Static Charge={latest.get('static_charge', 'N/A')}, "
+            f"Voltage={latest.get('voltage', 'N/A')}\n\n"
+            f"In the last {total_records} entries, there were {safe_count} safe, {medium_count} medium-risk, "
+            f"and {high_count} high-risk events. The system recommends checking devices showing medium/high risk "
+            f"threshold breaches and verifying environmental controls to reduce static charge."
         )
     else:
         report["report_name"] = "Monthly Risk Report"
@@ -281,23 +246,12 @@ def build_report_summary(report_type, latest, history):
         report["report_contents"] = (
             f"Monthly Risk Report\n"
             f"Generated at {now}\n\n"
-            f"Summary:\n"
-            f"  {report['summary']}\n\n"
-            f"Risk Counts:\n"
-            f"  Safe: {safe_count}\n"
-            f"  Medium: {medium_count}\n"
-            f"  High: {high_count}\n\n"
-            f"Latest Reading:\n"
-            f"  Timestamp: {latest.get('timestamp', 'N/A')}\n"
-            f"  Device ID: {latest.get('device_id', 'N/A')}\n"
-            f"  Fault Status: {latest.get('fault_status', 'N/A')}\n"
-            f"  Temperature: {latest.get('temperature', 'N/A')}\n"
-            f"  Humidity: {latest.get('humidity', 'N/A')}\n"
-            f"  Static Charge: {latest.get('static_charge', 'N/A')}\n"
-            f"  Voltage: {latest.get('voltage', 'N/A')}\n\n"
-            f"Insights:\n"
-            f"  The system observed the highest risk when latest values exceeded normal thresholds for static charge and temperature.\n"
-            f"  Review the environment and sensor placement to reduce ESD exposure."
+            f"Summary: {report['summary']}\n\n"
+            f"Risk counts: Safe={safe_count}, Medium={medium_count}, High={high_count}.\n"
+            f"Latest reading timestamp: {latest.get('timestamp', 'N/A')}\n"
+            f"Latest status: {last_status}\n\n"
+            f"Top observations: The system observed the highest risk when latest values exceeded normal thresholds "
+            f"for static charge and temperature. Review the environment and sensor placement to reduce ESD exposure."
         )
 
     return report
@@ -725,25 +679,6 @@ def api_user_activity():
     return jsonify({
         "activities": get_active_sessions()
     })
-
-
-@app.route("/api/upload-sensor", methods=["POST"])
-def api_upload_sensor():
-    """Endpoint for devices to upload sensor data."""
-    payload = request.get_json(silent=True) or request.form.to_dict() or {}
-    temperature = float(payload.get("temperature", 0))
-    humidity = float(payload.get("humidity", 0))
-    static_charge = float(payload.get("static_charge", 0))
-    voltage = float(payload.get("voltage", 0))
-    device_id = payload.get("device_id", "ESP32-01")
-
-    try:
-        from services.thingspeak_service import write_sensor_payload
-        write_sensor_payload(temperature, humidity, static_charge, voltage)
-        return jsonify({"status": "success", "message": "Data uploaded"})
-    except Exception as exc:
-        logger.warning("Failed to upload sensor data: %s", exc)
-        return jsonify({"status": "error", "message": str(exc)}), 500
 
 
 @app.route("/api/reports", methods=["GET", "POST"])
