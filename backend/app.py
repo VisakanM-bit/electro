@@ -1,19 +1,21 @@
-from flask import Flask, jsonify
-from dotenv import load_dotenv
 import os
-from backend.app import app
-load_dotenv()
+from flask import Flask
 
-app = Flask(__name__,
-    template_folder="../templates",
-    static_folder="../static"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static")
 )
-
 app.secret_key = os.getenv("FLASK_SECRET_KEY", "change-this-secret")
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+file_path = os.path.join(BASE_DIR, "users.json")
 
 @app.route('/api/history-data')
 def history_data():
@@ -28,5 +30,7 @@ def history_data():
         "risk_score": [0.2, 0.4, 0.8, 0.6, 0.9]
     })
 
-
+@app.route("/test")
+def test():
+    return "Backend working"
 from backend import routes
