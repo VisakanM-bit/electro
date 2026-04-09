@@ -12,6 +12,7 @@ app.secret_key = os.getenv("FLASK_SECRET_KEY", "change-this-secret")
 
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -29,7 +30,9 @@ def history_data():
         "voltage": [220, 221, 219, 222, 223],
         "risk_score": [0.2, 0.4, 0.8, 0.6, 0.9]
     })
-
+@app.route("/")
+def home():
+    return "Deployment working successfully"
 @app.route("/test")
 def test():
     return "Backend working"
