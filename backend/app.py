@@ -1,11 +1,10 @@
 from flask import Flask, jsonify
 from dotenv import load_dotenv
 import os
-
+from backend.app import app
 load_dotenv()
 
-app = Flask(
-    __name__,
+app = Flask(__name__,
     template_folder="../templates",
     static_folder="../static"
 )
